@@ -24,7 +24,9 @@
 #include"Map.h"
 #include"MapPoint.h"
 #include"KeyFrame.h"
+#ifdef PANGOLIN
 #include<pangolin/pangolin.h>
+#endif
 
 #include<mutex>
 
@@ -40,10 +42,12 @@ public:
 
     void DrawMapPoints();
     void DrawKeyFrames(const bool bDrawKF, const bool bDrawGraph);
-    void DrawCurrentCamera(pangolin::OpenGlMatrix &Twc);
     void SetCurrentCameraPose(const cv::Mat &Tcw);
     void SetReferenceKeyFrame(KeyFrame *pKF);
+#ifdef PANGOLIN
+    void DrawCurrentCamera(pangolin::OpenGlMatrix &Twc);
     void GetCurrentOpenGLCameraMatrix(pangolin::OpenGlMatrix &M);
+#endif
 
 private:
 

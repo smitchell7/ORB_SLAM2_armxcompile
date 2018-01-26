@@ -1,21 +1,30 @@
 echo "Configuring and building Thirdparty/DBoW2 ..."
 
-cd Thirdparty/DBoW2
-mkdir build
-cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
-make -j
 
-cd ../../g2o
+export ABI="armeabi-v7a"
+export API='android-15'
 
-echo "Configuring and building Thirdparty/g2o ..."
 
-mkdir build
-cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
-make -j
 
-cd ../../../
+export CMFLAGS='-DCMAKE_TOOLCHAIN_FILE='${PWD}'/../android-cmake/android.toolchain.cmake -DANDROID_NDK='${PWD}'/../android-ndk-r12b -DCMAKE_BUILD_TYPE=Release -DANDROID_ABI='$ABI' -DANDROID_NATIVE_API_LEVEL='$API' -Wno-dev -DOpenCV_DIR='${PWD}'/Thirdparty/opencv/build/'
+echo $CMFLAGS
+
+#export FAST='-j'
+export FAST=''
+cd Thirdparty
+declare -a THIRDPARTY=("opencv" "eigen" "DBoW2" "g2o")
+## now loop through the above array
+for i in "${THIRDPARTY[@]}"
+do
+  cd $i
+  mkdir build
+  cd build
+  cmake $CMFLAGS ../
+  make install $FAST || make $FAST
+  cd ../..
+done
+
+cd ../
 
 echo "Uncompress vocabulary ..."
 
@@ -27,5 +36,5 @@ echo "Configuring and building ORB_SLAM2 ..."
 
 mkdir build
 cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
-make -j
+cmake $CMFLAGS ../
+make $FAST

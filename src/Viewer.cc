@@ -19,7 +19,9 @@
 */
 
 #include "Viewer.h"
+#ifdef PANGOLIN
 #include <pangolin/pangolin.h>
+#endif
 
 #include <mutex>
 
@@ -56,6 +58,7 @@ void Viewer::Run()
     mbFinished = false;
     mbStopped = false;
 
+#ifdef PANGOLIN
     pangolin::CreateWindowAndBind("ORB-SLAM2: Map Viewer",1024,768);
 
     // 3D Mouse handler requires depth testing to be enabled
@@ -164,6 +167,7 @@ void Viewer::Run()
         if(CheckFinish())
             break;
     }
+#endif
 
     SetFinish();
 }

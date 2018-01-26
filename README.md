@@ -1,3 +1,13 @@
+# ORB-SLAM2 arm xcompile
+This package is meant to be a simple way to cross compile for arm devices. I also added some logic to allow the system to report xyz and roll, pitch, yaw. 
+
+The setup requires eigen and opencv. If you pull those programs into the thirdparty folder, they can be compiled pretty well. 
+
+This also requires https://github.com/taka-no-me/android-cmake, which is a delightful library for cmake and android. 
+
+
+
+
 # ORB-SLAM2
 **Authors:** [Raul Mur-Artal](http://webdiis.unizar.es/~raulmur/), [Juan D. Tardos](http://webdiis.unizar.es/~jdtardos/), [J. M. M. Montiel](http://webdiis.unizar.es/~josemari/) and [Dorian Galvez-Lopez](http://doriangalvez.com/) ([DBoW2](https://github.com/dorian3d/DBoW2))
 

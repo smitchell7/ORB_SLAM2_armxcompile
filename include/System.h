@@ -22,6 +22,8 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
+//#define PANGOLIN
+
 #include<string>
 #include<thread>
 #include<opencv2/core/core.hpp>
@@ -55,6 +57,18 @@ public:
         STEREO=1,
         RGBD=2
     };
+
+    // added some status flags. xyz and rpy (roll pitch yaw)
+    enum eTrackingState{
+      SYSTEM_NOT_READY=-1,
+      NO_IMAGES_YET=0,
+      NOT_INITIALIZED=1,
+      OK=2,
+      LOST=3};
+
+    eTrackingState mCurrentState;
+    vector<float> xyz;
+    cv::Mat rpy;
 
 public:
 

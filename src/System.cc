@@ -23,7 +23,7 @@
 #include "System.h"
 #include "Converter.h"
 #include <thread>
-#include <pangolin/pangolin.h>
+//#include <pangolin/pangolin.h>
 #include <iomanip>
 
 namespace ORB_SLAM2
@@ -41,6 +41,7 @@ System::System(const string &strVocFile, const string &strSettingsFile, const eS
     "under certain conditions. See LICENSE.txt." << endl << endl;
 
     cout << "Input sensor was set to: ";
+    mCurrentState=SYSTEM_NOT_READY;
 
     if(mSensor==MONOCULAR)
         cout << "Monocular" << endl;
@@ -264,6 +265,18 @@ cv::Mat System::TrackMonocular(const cv::Mat &im, const double &timestamp)
     mTrackedMapPoints = mpTracker->mCurrentFrame.mvpMapPoints;
     mTrackedKeyPointsUn = mpTracker->mCurrentFrame.mvKeysUn;
 
+    // I added this code to get the current pose. It includes header changes.
+    // Variables xyz, rpy, and mCurrentState are important
+    KeyFrame* pKF = mpTracker->mCurrentFrame.mpReferenceKF;
+    mCurrentState=(eTrackingState) mTrackingState;
+    if(mTrackingState==mpTracker->OK){
+      if(!(pKF->isBad())){
+        cv::Mat R = pKF->GetRotation().t();
+        xyz = Converter::toQuaternion(R);
+        rpy = pKF->GetCameraCenter();
+      }
+    }
+
     return Tcw;
 }
 
@@ -315,8 +328,8 @@ void System::Shutdown()
         usleep(5000);
     }
 
-    if(mpViewer)
-        pangolin::BindToContext("ORB-SLAM2: Map Viewer");
+//    if(mpViewer)
+//        pangolin::BindToContext("ORB-SLAM2: Map Viewer");
 }
 
 void System::SaveTrajectoryTUM(const string &filename)
